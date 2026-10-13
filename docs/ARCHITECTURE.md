@@ -6,6 +6,16 @@ The design establishes clean boundaries while remaining proportional to the
 product's current scope. It uses ports and use cases where they improve testing
 or isolate volatile technology, not as ceremony.
 
+## Architectural principles
+
+- **Domain-Driven Design:** domain language, invariants, value objects, explicit
+  errors, and application use cases model the product's business behavior.
+- **Clean Architecture:** dependencies point inward. Domain and application code
+  remain independent from HTTP, React Router, Prisma, PostgreSQL, and other
+  infrastructure details.
+- **Test-Driven Development:** domain rules and application behavior are built
+  through a red-green-refactor cycle that starts with a failing behavioral test.
+
 ```text
 React Router routes and UI
             |
