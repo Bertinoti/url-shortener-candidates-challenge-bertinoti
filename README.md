@@ -4,8 +4,9 @@
 
 ```
 url-shortener/
-├── applications/web/    # React + React Router v7
-└── libs/engine/         # Domain logic
+├── applications/web/    # React Router delivery and infrastructure adapters
+├── libs/engine/         # Domain and application logic
+└── prisma/              # PostgreSQL schema and migrations
 ```
 
 | Technology                                    | Description                                                                                       |
@@ -31,22 +32,22 @@ Open `http://localhost:5173`
 ## Docker Setup
 
 ```bash
-docker-compose up --build
+docker compose up --build
 ```
 
 Open `http://localhost:3000`
 
-The compose setup mounts the `url-data` volume so shortened URLs and click
-counts survive container restarts. To reset local challenge data, remove the
-volume with `docker compose down -v`.
+The compose setup starts PostgreSQL first, waits for its healthcheck, applies
+Prisma migrations, and then starts the web server. The `postgres-data` named
+volume keeps shortened URLs and click counts across container restarts. To
+reset local data, remove the volume with `docker compose down -v`.
 
 ## Design notes
 
-- The web layer only coordinates HTTP concerns; validation and persistence live
-  in `libs/engine` behind the `UrlRepository` abstraction.
-- `FileUrlRepository` is deliberately dependency-light for this timed
-  challenge. It writes atomically and can be replaced by a Prisma/PostgreSQL
-  implementation without changing the routes.
+- The web layer coordinates HTTP concerns and owns infrastructure adapters;
+  validation and persistence are accessed through the `UrlRepository` port.
+- Prisma implements the repository against PostgreSQL. The unique code index
+  protects creation from collisions, and click counts use an atomic increment.
 - Short codes use cryptographically secure random bytes and a uniqueness check.
 - Redirects increment click counts before returning the redirect response.
 - URL validation accepts only HTTP(S), limits input size, and the create action
