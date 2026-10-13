@@ -35,3 +35,19 @@ docker-compose up --build
 ```
 
 Open `http://localhost:3000`
+
+The compose setup mounts the `url-data` volume so shortened URLs and click
+counts survive container restarts. To reset local challenge data, remove the
+volume with `docker compose down -v`.
+
+## Design notes
+
+- The web layer only coordinates HTTP concerns; validation and persistence live
+  in `libs/engine` behind the `UrlRepository` abstraction.
+- `FileUrlRepository` is deliberately dependency-light for this timed
+  challenge. It writes atomically and can be replaced by a Prisma/PostgreSQL
+  implementation without changing the routes.
+- Short codes use cryptographically secure random bytes and a uniqueness check.
+- Redirects increment click counts before returning the redirect response.
+- URL validation accepts only HTTP(S), limits input size, and the create action
+  includes a small per-client rate limit to reduce abuse.
