@@ -1,8 +1,4 @@
-import { FileUrlRepository } from "./shortened-url";
-
 export { baseUrl } from "./base-url";
-export { FileUrlRepository, generateShortCode, validateUrl, MAX_URL_LENGTH } from "./shortened-url";
-export type { ShortenedUrl } from "./shortened-url";
 
 export { CreateShortUrl } from "./application/use-cases/create-short-url";
 export { ListShortUrls } from "./application/use-cases/list-short-urls";
@@ -23,5 +19,3 @@ export type {
   UrlRepository,
 } from "./application/ports/url-repository";
 export type { ShortUrl } from "./domain/short-url";
-
-export const urlRepository = new FileUrlRepository(process.env.DATA_FILE ?? "data/urls.json");

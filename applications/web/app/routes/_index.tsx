@@ -1,13 +1,14 @@
 import { Form, useActionData, useNavigation } from "react-router";
 import type { Route } from "./+types/_index";
-import { baseUrl, urlRepository, validateUrl } from "@url-shortener/engine";
+import { baseUrl, InvalidDestinationUrlError } from "@url-shortener/engine";
+import { services } from "../server/container.server";
 
 const requestsByClient = new Map<string, number[]>();
 
 export async function loader() {
   return {
     baseUrl: `${baseUrl}/s/`,
-    urls: await urlRepository.list(),
+    urls: await services.listShortUrls.execute(),
   };
 }
 
@@ -20,14 +21,19 @@ export async function action({ request }: Route.ActionArgs) {
 
   const formData = await request.formData();
   const url = String(formData.get("url") ?? "");
-  const validationError = validateUrl(url);
-  if (validationError) return { error: validationError };
+  try {
+    const record = await services.createShortUrl.execute({ originalUrl: url });
 
-  const record = await urlRepository.create(url.trim());
+    return {
+      shortenedUrl: `${baseUrl}/s/${record.code}`,
+    };
+  } catch (error) {
+    if (error instanceof InvalidDestinationUrlError) {
+      return { error: error.message };
+    }
 
-  return {
-    shortenedUrl: `${baseUrl}/s/${record.code}`,
-  };
+    return { error: "We could not create that short URL. Please try again." };
+  }
 }
 
 export function meta({}: Route.MetaArgs) {
@@ -47,7 +53,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
     <main className="min-h-screen bg-slate-50 px-4 py-12 text-slate-900">
       <div className="mx-auto max-w-4xl">
         <header className="mb-8">
-          <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-indigo-600">Kabilio challenge</p>
+          <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-indigo-600">URL management</p>
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">Short links, clear insights.</h1>
           <p className="mt-3 max-w-2xl text-slate-600">Create durable short links and keep an eye on their usage.</p>
         </header>
@@ -76,7 +82,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
             {urls.length === 0 ? <p className="p-6 text-slate-500">No links yet. Create your first one above.</p> : <div className="divide-y divide-slate-100">
               {urls.map((url) => <article key={url.code} className="flex flex-col gap-2 p-5 sm:flex-row sm:items-center sm:justify-between">
                 <div className="min-w-0"><a className="font-semibold text-indigo-700 hover:underline" href={`${baseUrl}/s/${url.code}`} target="_blank" rel="noreferrer">{baseUrl}/s/{url.code}</a><p className="truncate text-sm text-slate-500">{url.originalUrl}</p></div>
-                <div className="flex gap-5 text-sm text-slate-600"><span><strong className="text-slate-900">{url.clicks}</strong> clicks</span><time dateTime={url.createdAt}>{new Date(url.createdAt).toLocaleDateString()}</time></div>
+                <div className="flex gap-5 text-sm text-slate-600"><span><strong className="text-slate-900">{url.clicks}</strong> clicks</span><time dateTime={url.createdAt.toISOString()}>{url.createdAt.toLocaleDateString()}</time></div>
               </article>)}
             </div>}
           </div>
