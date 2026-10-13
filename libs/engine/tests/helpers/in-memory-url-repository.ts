@@ -1,5 +1,6 @@
 import { ShortCodeAlreadyExistsError } from "../../src/domain/errors";
 import type { ShortUrl } from "../../src/domain/short-url";
+import type { ClickEvent } from "../../src/domain/click-event";
 import type {
   CreateShortUrlRecord,
   UrlRepository,
@@ -29,6 +30,15 @@ export class InMemoryUrlRepository implements UrlRepository {
 
   async list(): Promise<ShortUrl[]> {
     return [...this.records.values()];
+  }
+
+  async delete(code: string): Promise<boolean> {
+    return this.records.delete(code);
+  }
+
+  async listClickEvents(code: string): Promise<ClickEvent[]> {
+    const record = this.records.get(code);
+    return Array.from({ length: record?.clicks ?? 0 }, () => ({ clickedAt: record?.createdAt ?? new Date() }));
   }
 
   seed(record: ShortUrl): void {

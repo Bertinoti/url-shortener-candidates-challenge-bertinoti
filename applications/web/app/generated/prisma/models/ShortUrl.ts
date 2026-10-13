@@ -216,6 +216,7 @@ export type ShortUrlWhereInput = {
   originalUrl?: Prisma.StringFilter<"ShortUrl"> | string
   createdAt?: Prisma.DateTimeFilter<"ShortUrl"> | Date | string
   clicks?: Prisma.IntFilter<"ShortUrl"> | number
+  clickEvents?: Prisma.ClickEventListRelationFilter
 }
 
 export type ShortUrlOrderByWithRelationInput = {
@@ -224,6 +225,7 @@ export type ShortUrlOrderByWithRelationInput = {
   originalUrl?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   clicks?: Prisma.SortOrder
+  clickEvents?: Prisma.ClickEventOrderByRelationAggregateInput
 }
 
 export type ShortUrlWhereUniqueInput = Prisma.AtLeast<{
@@ -235,6 +237,7 @@ export type ShortUrlWhereUniqueInput = Prisma.AtLeast<{
   originalUrl?: Prisma.StringFilter<"ShortUrl"> | string
   createdAt?: Prisma.DateTimeFilter<"ShortUrl"> | Date | string
   clicks?: Prisma.IntFilter<"ShortUrl"> | number
+  clickEvents?: Prisma.ClickEventListRelationFilter
 }, "id" | "code">
 
 export type ShortUrlOrderByWithAggregationInput = {
@@ -267,6 +270,7 @@ export type ShortUrlCreateInput = {
   originalUrl: string
   createdAt?: Date | string
   clicks?: number
+  clickEvents?: Prisma.ClickEventCreateNestedManyWithoutShortUrlInput
 }
 
 export type ShortUrlUncheckedCreateInput = {
@@ -275,6 +279,7 @@ export type ShortUrlUncheckedCreateInput = {
   originalUrl: string
   createdAt?: Date | string
   clicks?: number
+  clickEvents?: Prisma.ClickEventUncheckedCreateNestedManyWithoutShortUrlInput
 }
 
 export type ShortUrlUpdateInput = {
@@ -283,6 +288,7 @@ export type ShortUrlUpdateInput = {
   originalUrl?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   clicks?: Prisma.IntFieldUpdateOperationsInput | number
+  clickEvents?: Prisma.ClickEventUpdateManyWithoutShortUrlNestedInput
 }
 
 export type ShortUrlUncheckedUpdateInput = {
@@ -291,6 +297,7 @@ export type ShortUrlUncheckedUpdateInput = {
   originalUrl?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   clicks?: Prisma.IntFieldUpdateOperationsInput | number
+  clickEvents?: Prisma.ClickEventUncheckedUpdateManyWithoutShortUrlNestedInput
 }
 
 export type ShortUrlCreateManyInput = {
@@ -349,6 +356,11 @@ export type ShortUrlSumOrderByAggregateInput = {
   clicks?: Prisma.SortOrder
 }
 
+export type ShortUrlScalarRelationFilter = {
+  is?: Prisma.ShortUrlWhereInput
+  isNot?: Prisma.ShortUrlWhereInput
+}
+
 export type StringFieldUpdateOperationsInput = {
   set?: string
 }
@@ -365,6 +377,97 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type ShortUrlCreateNestedOneWithoutClickEventsInput = {
+  create?: Prisma.XOR<Prisma.ShortUrlCreateWithoutClickEventsInput, Prisma.ShortUrlUncheckedCreateWithoutClickEventsInput>
+  connectOrCreate?: Prisma.ShortUrlCreateOrConnectWithoutClickEventsInput
+  connect?: Prisma.ShortUrlWhereUniqueInput
+}
+
+export type ShortUrlUpdateOneRequiredWithoutClickEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.ShortUrlCreateWithoutClickEventsInput, Prisma.ShortUrlUncheckedCreateWithoutClickEventsInput>
+  connectOrCreate?: Prisma.ShortUrlCreateOrConnectWithoutClickEventsInput
+  upsert?: Prisma.ShortUrlUpsertWithoutClickEventsInput
+  connect?: Prisma.ShortUrlWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ShortUrlUpdateToOneWithWhereWithoutClickEventsInput, Prisma.ShortUrlUpdateWithoutClickEventsInput>, Prisma.ShortUrlUncheckedUpdateWithoutClickEventsInput>
+}
+
+export type ShortUrlCreateWithoutClickEventsInput = {
+  id?: string
+  code: string
+  originalUrl: string
+  createdAt?: Date | string
+  clicks?: number
+}
+
+export type ShortUrlUncheckedCreateWithoutClickEventsInput = {
+  id?: string
+  code: string
+  originalUrl: string
+  createdAt?: Date | string
+  clicks?: number
+}
+
+export type ShortUrlCreateOrConnectWithoutClickEventsInput = {
+  where: Prisma.ShortUrlWhereUniqueInput
+  create: Prisma.XOR<Prisma.ShortUrlCreateWithoutClickEventsInput, Prisma.ShortUrlUncheckedCreateWithoutClickEventsInput>
+}
+
+export type ShortUrlUpsertWithoutClickEventsInput = {
+  update: Prisma.XOR<Prisma.ShortUrlUpdateWithoutClickEventsInput, Prisma.ShortUrlUncheckedUpdateWithoutClickEventsInput>
+  create: Prisma.XOR<Prisma.ShortUrlCreateWithoutClickEventsInput, Prisma.ShortUrlUncheckedCreateWithoutClickEventsInput>
+  where?: Prisma.ShortUrlWhereInput
+}
+
+export type ShortUrlUpdateToOneWithWhereWithoutClickEventsInput = {
+  where?: Prisma.ShortUrlWhereInput
+  data: Prisma.XOR<Prisma.ShortUrlUpdateWithoutClickEventsInput, Prisma.ShortUrlUncheckedUpdateWithoutClickEventsInput>
+}
+
+export type ShortUrlUpdateWithoutClickEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  originalUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clicks?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
+export type ShortUrlUncheckedUpdateWithoutClickEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  originalUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clicks?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
+
+/**
+ * Count Type ShortUrlCountOutputType
+ */
+
+export type ShortUrlCountOutputType = {
+  clickEvents: number
+}
+
+export type ShortUrlCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  clickEvents?: boolean | ShortUrlCountOutputTypeCountClickEventsArgs
+}
+
+/**
+ * ShortUrlCountOutputType without action
+ */
+export type ShortUrlCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ShortUrlCountOutputType
+   */
+  select?: Prisma.ShortUrlCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * ShortUrlCountOutputType without action
+ */
+export type ShortUrlCountOutputTypeCountClickEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClickEventWhereInput
+}
 
 
 export type ShortUrlSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -373,6 +476,8 @@ export type ShortUrlSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   originalUrl?: boolean
   createdAt?: boolean
   clicks?: boolean
+  clickEvents?: boolean | Prisma.ShortUrl$clickEventsArgs<ExtArgs>
+  _count?: boolean | Prisma.ShortUrlCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["shortUrl"]>
 
 export type ShortUrlSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -400,10 +505,18 @@ export type ShortUrlSelectScalar = {
 }
 
 export type ShortUrlOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "originalUrl" | "createdAt" | "clicks", ExtArgs["result"]["shortUrl"]>
+export type ShortUrlInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  clickEvents?: boolean | Prisma.ShortUrl$clickEventsArgs<ExtArgs>
+  _count?: boolean | Prisma.ShortUrlCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type ShortUrlIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type ShortUrlIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $ShortUrlPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ShortUrl"
-  objects: {}
+  objects: {
+    clickEvents: Prisma.$ClickEventPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     code: string
@@ -804,6 +917,7 @@ readonly fields: ShortUrlFieldRefs;
  */
 export interface Prisma__ShortUrlClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  clickEvents<T extends Prisma.ShortUrl$clickEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ShortUrl$clickEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClickEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -855,6 +969,10 @@ export type ShortUrlFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Inte
    */
   omit?: Prisma.ShortUrlOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ShortUrlInclude<ExtArgs> | null
+  /**
    * Filter, which ShortUrl to fetch.
    */
   where: Prisma.ShortUrlWhereUniqueInput
@@ -873,6 +991,10 @@ export type ShortUrlFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensio
    */
   omit?: Prisma.ShortUrlOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ShortUrlInclude<ExtArgs> | null
+  /**
    * Filter, which ShortUrl to fetch.
    */
   where: Prisma.ShortUrlWhereUniqueInput
@@ -890,6 +1012,10 @@ export type ShortUrlFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Omit specific fields from the ShortUrl
    */
   omit?: Prisma.ShortUrlOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ShortUrlInclude<ExtArgs> | null
   /**
    * Filter, which ShortUrl to fetch.
    */
@@ -939,6 +1065,10 @@ export type ShortUrlFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extension
    */
   omit?: Prisma.ShortUrlOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ShortUrlInclude<ExtArgs> | null
+  /**
    * Filter, which ShortUrl to fetch.
    */
   where?: Prisma.ShortUrlWhereInput
@@ -986,6 +1116,10 @@ export type ShortUrlFindManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Omit specific fields from the ShortUrl
    */
   omit?: Prisma.ShortUrlOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ShortUrlInclude<ExtArgs> | null
   /**
    * Filter, which ShortUrls to fetch.
    */
@@ -1035,6 +1169,10 @@ export type ShortUrlCreateArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   omit?: Prisma.ShortUrlOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ShortUrlInclude<ExtArgs> | null
+  /**
    * The data needed to create a ShortUrl.
    */
   data: Prisma.XOR<Prisma.ShortUrlCreateInput, Prisma.ShortUrlUncheckedCreateInput>
@@ -1082,6 +1220,10 @@ export type ShortUrlUpdateArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Omit specific fields from the ShortUrl
    */
   omit?: Prisma.ShortUrlOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ShortUrlInclude<ExtArgs> | null
   /**
    * The data needed to update a ShortUrl.
    */
@@ -1149,6 +1291,10 @@ export type ShortUrlUpsertArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   omit?: Prisma.ShortUrlOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ShortUrlInclude<ExtArgs> | null
+  /**
    * The filter to search for the ShortUrl to update in case it exists.
    */
   where: Prisma.ShortUrlWhereUniqueInput
@@ -1175,6 +1321,10 @@ export type ShortUrlDeleteArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   omit?: Prisma.ShortUrlOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ShortUrlInclude<ExtArgs> | null
+  /**
    * Filter which ShortUrl to delete.
    */
   where: Prisma.ShortUrlWhereUniqueInput
@@ -1195,6 +1345,30 @@ export type ShortUrlDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 /**
+ * ShortUrl.clickEvents
+ */
+export type ShortUrl$clickEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClickEvent
+   */
+  select?: Prisma.ClickEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ClickEvent
+   */
+  omit?: Prisma.ClickEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClickEventInclude<ExtArgs> | null
+  where?: Prisma.ClickEventWhereInput
+  orderBy?: Prisma.ClickEventOrderByWithRelationInput | Prisma.ClickEventOrderByWithRelationInput[]
+  cursor?: Prisma.ClickEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClickEventScalarFieldEnum | Prisma.ClickEventScalarFieldEnum[]
+}
+
+/**
  * ShortUrl without action
  */
 export type ShortUrlDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1206,4 +1380,8 @@ export type ShortUrlDefaultArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Omit specific fields from the ShortUrl
    */
   omit?: Prisma.ShortUrlOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ShortUrlInclude<ExtArgs> | null
 }

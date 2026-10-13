@@ -14,8 +14,8 @@ export async function loader({ params }: Route.LoaderArgs) {
   }
 
   try {
-    const record = await services.resolveShortUrl.execute({ code });
-    return redirect(record.originalUrl);
+    await services.resolveShortUrl.execute({ code });
+    return redirect("/");
   } catch (error) {
     if (error instanceof InvalidShortCodeError) {
       throw new Response(error.message, { status: 400 });

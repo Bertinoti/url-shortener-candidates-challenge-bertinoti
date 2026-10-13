@@ -11,7 +11,8 @@ decisions.
 The completed service must:
 
 - create a unique short code for a valid HTTP or HTTPS URL;
-- redirect a known code to its original URL;
+- resolve a known code, record the click, and refresh the dashboard while
+  retaining its original destination;
 - record clicks without losing concurrent updates;
 - list created URLs with their click statistics;
 - persist data across application and container restarts;
@@ -20,7 +21,7 @@ The completed service must:
 
 ## Agreed technical decisions
 
-- React 19 and React Router 7 remain the full-stack delivery framework.
+- React 19 and React Router 8 remain the full-stack delivery framework.
 - Tailwind remains the styling system; adding a component library is optional,
   not a success criterion.
 - Domain and application logic live in `libs/engine` and have no dependency on
@@ -36,7 +37,7 @@ The completed service must:
 
 ## Priorities
 
-1. Correct create, redirect, and click-count behavior.
+1. Correct create, resolve, refresh, and click-count behavior.
 2. Database-enforced uniqueness and atomic updates.
 3. Clear dependency boundaries and testable use cases.
 4. Important automated tests and robust HTTP error mapping.
@@ -56,10 +57,10 @@ The completed service must:
 
 - **Short URL**: the persisted record containing a code, destination, creation
   time, and click count.
-- **Short code**: the URL-safe public identifier used by the redirect route.
+- **Short code**: the URL-safe public identifier used by the resolve route.
 - **Destination URL**: the validated HTTP or HTTPS URL supplied by the user.
 - **Click**: one successful resolution of an existing short code through the
-  redirect route.
+  resolve route; the dashboard refreshes after recording it.
 - **Collision**: an attempted insert whose short code already exists.
 
 ## Acceptance criteria
@@ -73,7 +74,7 @@ The completed service must:
 - Restarting the web container does not remove records, and restarting the
   database container retains data through its named volume.
 - Domain/use-case tests, typecheck, production build, Docker build, migrations,
-  and a create/redirect/list smoke flow are run before release.
+  and a create/resolve/list smoke flow are run before release.
 - `README.md` and `docs/ARCHITECTURE.md` describe the system that actually
   exists, including its known limitations and operational trade-offs.
 

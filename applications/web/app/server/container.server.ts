@@ -1,5 +1,7 @@
 import {
   CreateShortUrl,
+  DeleteShortUrl,
+  ListClickEvents,
   ListShortUrls,
   ResolveShortUrl,
 } from "@url-shortener/engine";
@@ -14,6 +16,8 @@ const clock = new SystemClock();
 
 export const services = {
   createShortUrl: new CreateShortUrl(repository, codeGenerator, clock),
+  deleteShortUrl: new DeleteShortUrl(repository),
+  listClickEvents: new ListClickEvents(repository),
   listShortUrls: new ListShortUrls(repository),
   resolveShortUrl: new ResolveShortUrl(repository),
 };

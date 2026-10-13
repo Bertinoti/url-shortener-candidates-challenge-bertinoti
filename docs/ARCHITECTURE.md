@@ -50,6 +50,7 @@ use cases.
 - Create a short URL, retrying bounded code collisions.
 - Resolve a short code and record its click.
 - List short URLs for the statistics view.
+- List click events for the expandable click-history view.
 - Depend on ports such as `UrlRepository`, `ShortCodeGenerator`, and `Clock`
   only when they make behavior deterministic or isolate infrastructure.
 
@@ -80,11 +81,15 @@ use cases.
 4. A unique-constraint collision causes a bounded retry with a new code.
 5. The action maps success or a known failure to an intentional HTTP response.
 
-### Redirect and count
+### Resolve, count, and refresh
 
-1. The loader validates the public code and invokes the redirect use case.
-2. The repository resolves the record and increments `clicks` atomically.
-3. A missing code becomes `404`; a known record produces the redirect response.
+1. The loader validates the public code and invokes the resolve use case.
+2. The repository atomically increments `clicks` and records a `ClickEvent` in
+   the same transaction.
+3. A missing code becomes `404`; a known record returns to `/` so the dashboard
+   can render the updated count and click history. The resolved destination is
+   retained by the use case and repository, but this dashboard interaction does
+   not navigate the browser away from the application.
 
 ### List
 

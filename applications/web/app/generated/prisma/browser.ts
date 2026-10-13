@@ -22,3 +22,8 @@ export * from './enums';
  * 
  */
 export type ShortUrl = Prisma.ShortUrlModel
+/**
+ * Model ClickEvent
+ * 
+ */
+export type ClickEvent = Prisma.ClickEventModel

@@ -148,8 +148,8 @@ recreation.
 - Return a safe `500` response for unexpected failures and log details only on
   the server.
 - Keep rate limiting behind a small delivery/infrastructure abstraction.
-- Extract reusable UI components for the form, feedback, result, and URL list.
-- Add copy-to-clipboard feedback for the generated URL.
+- Keep the form, feedback, result, and URL list presentation cohesive through
+  consistent markup and shared styling.
 - Preserve loading, validation, success, empty, and failure states.
 - Make controls keyboard accessible and expose errors with appropriate alert or
   live-region semantics.
@@ -163,8 +163,9 @@ selected. Routes remain easy to read and test because they do not own business
 decisions or persistence details.
 
 Explicit HTTP statuses let clients distinguish invalid input, throttling,
-missing resources, and server failures. Reusable components keep the interface
-consistent and make accessibility and feedback behavior visible in one place.
+missing resources, and server failures. Consistent UI primitives keep the
+interface readable and make accessibility and feedback behavior visible in the
+route component.
 
 ### 4. Verification and documentation — 20 minutes
 
@@ -177,7 +178,7 @@ consistent and make accessibility and feedback behavior visible in one place.
 - Run `docker compose config`.
 - When the Docker daemon is available, run the Docker build and a smoke flow:
   create a URL, list it, resolve it, resolve it again, and verify the click
-  count.
+  count and refreshed dashboard state.
 - Verify persistence after restarting the web service and database container.
 - Update the README Docker and local setup instructions.
 - Keep `docs/ARCHITECTURE.md` synchronized with the actual dependency graph.
@@ -208,7 +209,7 @@ lost if the next engineer cannot reproduce the setup or understand the trade-off
 
 The implementation is complete when:
 
-- all three product flows work: create, redirect, and list;
+- all three product flows work: create, resolve/count, and list;
 - persistence uses Prisma/PostgreSQL rather than the legacy file repository;
 - domain and application code remain infrastructure-independent;
 - collision handling and click counting are safe under concurrent writes;

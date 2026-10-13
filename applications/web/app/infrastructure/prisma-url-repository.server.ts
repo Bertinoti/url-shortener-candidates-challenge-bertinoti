@@ -9,6 +9,7 @@ import {
   type ShortUrl,
   type UrlRepository,
 } from "@url-shortener/engine";
+import type { ClickEvent } from "@url-shortener/engine";
 
 export class PrismaUrlRepository implements UrlRepository {
   constructor(private readonly client: PrismaClient) {}
@@ -35,9 +36,17 @@ export class PrismaUrlRepository implements UrlRepository {
 
   async findAndIncrementClicks(code: string): Promise<ShortUrl | null> {
     try {
-      const record = await this.client.shortUrl.update({
-        where: { code },
-        data: { clicks: { increment: 1 } },
+      const record = await this.client.$transaction(async (transaction) => {
+        const updated = await transaction.shortUrl.update({
+          where: { code },
+          data: { clicks: { increment: 1 } },
+        });
+
+        await transaction.clickEvent.create({
+          data: { shortUrlId: updated.id },
+        });
+
+        return updated;
       });
 
       return this.toDomain(record);
@@ -53,6 +62,33 @@ export class PrismaUrlRepository implements UrlRepository {
     });
 
     return records.map((record) => this.toDomain(record));
+  }
+
+  async delete(code: string): Promise<boolean> {
+    try {
+      await this.client.shortUrl.delete({ where: { code } });
+      return true;
+    } catch (error) {
+      if (this.isKnownError(error, "P2025")) return false;
+      throw error;
+    }
+  }
+
+  async listClickEvents(code: string): Promise<ClickEvent[]> {
+    const record = await this.client.shortUrl.findUnique({
+      where: { code },
+      select: { id: true },
+    });
+
+    if (!record) return [];
+
+    const events = await this.client.clickEvent.findMany({
+      where: { shortUrlId: record.id },
+      orderBy: { clickedAt: "desc" },
+      select: { clickedAt: true },
+    });
+
+    return events;
   }
 
   private toDomain(record: PrismaShortUrl): ShortUrl {

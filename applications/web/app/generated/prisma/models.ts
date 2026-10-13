@@ -9,4 +9,5 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/ShortUrl'
+export type * from './models/ClickEvent'
 export type * from './commonInputTypes'

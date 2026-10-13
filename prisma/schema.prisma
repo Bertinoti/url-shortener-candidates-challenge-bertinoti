@@ -14,5 +14,16 @@ model ShortUrl {
   createdAt   DateTime @default(now())
   clicks      Int      @default(0)
 
+  clickEvents ClickEvent[]
+
   @@index([createdAt])
+}
+
+model ClickEvent {
+  id        String   @id @default(cuid())
+  shortUrlId String
+  clickedAt DateTime @default(now())
+  shortUrl  ShortUrl @relation(fields: [shortUrlId], references: [id], onDelete: Cascade)
+
+  @@index([shortUrlId, clickedAt])
 }
